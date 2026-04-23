@@ -2,266 +2,312 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>買い出しリスト</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>買い出しリスト🛒</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --cream:#F5F0E8;
-  --blue:#7AAFD4;
-  --blue-light:#B8D4E8;
-  --blue-dark:#4A7FA8;
-  --orange:#E8613A;
-  --orange-light:#F4A080;
-  --orange-dark:#C04820;
-  --text:#2C2420;
-  --text-muted:#8A7A72;
-  --border:#D4C8BC;
-  --white:#FDFAF6;
+:root {
+  --bg-base: #F9F7F2;
+  --accent-orange: #E26D43;
+  --accent-blue: #84A3BF;
+  --accent-blue-light: #B8CDD9;
+  --text-main: #4A433F;
+  --text-muted: #A89F9A;
+  --white: #FFFFFF;
+  --card-shadow: 0 10px 25px rgba(0,0,0,0.04);
+  --border: #EBE6DF;
 }
-html,body{
-  font-family:'Noto Sans JP',sans-serif;
-  background:var(--cream);
-  color:var(--text);
-  min-height:100vh;
-  -webkit-text-size-adjust:100%;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  padding-bottom: 24px;
+  min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
 }
-.app{max-width:420px;margin:0 auto;padding-bottom:80px}
 
 /* ===== Header ===== */
-.header{
-  background:var(--blue);
-  padding:20px 16px 16px;
-  position:sticky;top:0;z-index:100;
+.header {
+  background: var(--white);
+  padding: 22px 20px 18px;
+  text-align: center;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  box-shadow: var(--card-shadow);
+  position: sticky; top: 0; z-index: 100;
 }
-.header-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.header-title{font-size:18px;font-weight:700;color:var(--white);letter-spacing:0.05em}
-.flower-svg{flex-shrink:0}
+.header-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--accent-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-bottom: 14px;
+  letter-spacing: 0.04em;
+}
 
-.user-bar{display:flex;gap:6px;flex-wrap:wrap}
-.user-btn{
-  padding:7px 14px;border-radius:20px;
-  border:2px solid rgba(255,255,255,0.4);
-  font-size:13px;font-family:'Noto Sans JP',sans-serif;font-weight:500;
-  cursor:pointer;transition:all 0.2s;
-  background:rgba(255,255,255,0.15);color:var(--white);
-  -webkit-tap-highlight-color:transparent;
+/* ===== User bar ===== */
+.user-bar {
+  display: flex; gap: 7px; flex-wrap: wrap; justify-content: center;
 }
-.user-btn.active{background:var(--white);border-color:var(--white)}
-.user-btn[data-user="後河内"].active{color:#4A7FA8}
-.user-btn[data-user="吉村"].active{color:#C04820}
-.user-btn[data-user="吉本"].active{color:#3A7A50}
-.user-btn[data-user="川田"].active{color:#7A48A0}
+.user-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 2px solid var(--border);
+  font-size: 12px;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--bg-base);
+  color: var(--text-muted);
+  transition: all 0.18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.user-btn.active { color: var(--white); }
+.user-btn[data-user="後河内"].active { background: var(--accent-blue);   border-color: var(--accent-blue); }
+.user-btn[data-user="吉村"].active  { background: var(--accent-orange);  border-color: var(--accent-orange); }
+.user-btn[data-user="吉本"].active  { background: #5BA87A; border-color: #5BA87A; }
+.user-btn[data-user="川田"].active  { background: #A878C8; border-color: #A878C8; }
 
 /* ===== Sync bar ===== */
-.sync-bar{
-  background:var(--blue-dark);
-  padding:9px 16px;
-  display:flex;justify-content:space-between;align-items:center;
+.sync-bar {
+  background: var(--accent-blue);
+  padding: 9px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.sync-status{font-size:11px;color:rgba(255,255,255,0.8)}
-.sync-btn{
-  background:var(--orange);color:white;
-  border:none;padding:7px 16px;border-radius:20px;
-  font-size:12px;font-family:'Noto Sans JP',sans-serif;font-weight:500;
-  cursor:pointer;transition:all 0.2s;
-  -webkit-tap-highlight-color:transparent;
+.sync-status {
+  font-size: 11px; font-weight: 700;
+  color: rgba(255,255,255,0.85);
 }
-.sync-btn:active{transform:scale(0.95);opacity:0.85}
+.sync-btn {
+  background: var(--accent-orange);
+  color: var(--white);
+  border: none;
+  padding: 7px 16px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.sync-btn:active { transform: scale(0.95); opacity: 0.85; }
+
+/* ===== Main ===== */
+.container { max-width: 500px; margin: 0 auto; padding: 16px 14px; }
 
 /* ===== Store card ===== */
-.stores-list{padding:12px}
-.store-card{
-  background:var(--white);border-radius:16px;
-  margin-bottom:10px;overflow:hidden;
-  border:1.5px solid var(--border);
+.store-card {
+  background: var(--white);
+  border-radius: 24px;
+  margin-bottom: 12px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
 }
-.store-header{
-  display:flex;align-items:center;padding:14px 16px;
-  cursor:pointer;gap:10px;user-select:none;
-  -webkit-tap-highlight-color:transparent;
+.store-header {
+  display: flex; align-items: center;
+  padding: 15px 18px;
+  cursor: pointer; gap: 10px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.store-icon{
-  width:34px;height:34px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;flex-shrink:0;
+.store-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
 }
-.store-name{flex:1;font-size:15px;font-weight:700;color:var(--text)}
-.store-count{
-  font-size:12px;color:var(--text-muted);
-  background:var(--cream);padding:3px 9px;border-radius:10px;
+.store-name { flex: 1; font-size: 15px; font-weight: 700; color: var(--text-main); }
+.store-count {
+  font-size: 11px; font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-base);
+  padding: 3px 10px; border-radius: 12px;
 }
-.store-arrow{
-  width:20px;height:20px;flex-shrink:0;
-  color:var(--text-muted);transition:transform 0.25s;
+.store-arrow {
+  width: 20px; height: 20px; flex-shrink: 0;
+  color: var(--text-muted); transition: transform 0.25s;
 }
-.store-card.open .store-arrow{transform:rotate(180deg)}
-
-.store-body{max-height:0;overflow:hidden;transition:max-height 0.32s ease}
-.store-card.open .store-body{max-height:3000px}
-.items-list{border-top:1px solid var(--border);padding:4px 0}
+.store-card.open .store-arrow { transform: rotate(180deg); }
+.store-body { max-height: 0; overflow: hidden; transition: max-height 0.32s ease; }
+.store-card.open .store-body { max-height: 3000px; }
+.items-list { border-top: 1.5px solid var(--bg-base); padding: 4px 0; }
 
 /* ===== Item row ===== */
-.item-row{
-  display:flex;align-items:flex-start;
-  padding:11px 16px;gap:10px;
-  border-bottom:0.5px solid var(--cream);
-  transition:opacity 0.2s;
+.item-row {
+  display: flex; align-items: flex-start;
+  padding: 11px 18px; gap: 11px;
+  border-bottom: 1px solid var(--bg-base);
+  transition: opacity 0.18s;
 }
-.item-row:last-child{border-bottom:none}
-.item-row.done-row{opacity:0.55}
+.item-row:last-child { border-bottom: none; }
+.item-row.done-row { opacity: 0.5; }
 
-.checkbox-wrap{flex-shrink:0;margin-top:1px}
-.custom-cb{
-  width:24px;height:24px;border-radius:7px;
-  border:2px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all 0.18s;background:white;
-  -webkit-tap-highlight-color:transparent;
+.custom-cb {
+  width: 24px; height: 24px; border-radius: 8px;
+  border: 2.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.18s;
+  background: var(--white); flex-shrink: 0; margin-top: 1px;
+  -webkit-tap-highlight-color: transparent;
 }
-.custom-cb.checked-後河内{background:#7AAFD4;border-color:#7AAFD4}
-.custom-cb.checked-吉村{background:#E8613A;border-color:#E8613A}
-.custom-cb.checked-吉本{background:#5BA87A;border-color:#5BA87A}
-.custom-cb.checked-川田{background:#A878C8;border-color:#A878C8}
-.check-mark{display:none;color:white;font-size:14px;font-weight:700;line-height:1}
-.custom-cb.checked .check-mark{display:block}
+.custom-cb.checked-後河内 { background: var(--accent-blue);  border-color: var(--accent-blue); }
+.custom-cb.checked-吉村   { background: var(--accent-orange); border-color: var(--accent-orange); }
+.custom-cb.checked-吉本   { background: #5BA87A; border-color: #5BA87A; }
+.custom-cb.checked-川田   { background: #A878C8; border-color: #A878C8; }
+.check-mark { display: none; color: var(--white); font-size: 13px; font-weight: 700; line-height: 1; }
+.custom-cb.checked .check-mark { display: block; }
 
-.item-content{flex:1;min-width:0}
-.item-name{font-size:14px;font-weight:500;transition:all 0.2s;line-height:1.45}
-.item-name.done{color:var(--text-muted);text-decoration:line-through}
-.item-meta{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap}
-.item-memo{font-size:11px;color:var(--text-muted)}
-.checker-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
-.badge-後河内{background:#E8F4FB;color:#3A6A90}
-.badge-吉村{background:#FBF0EC;color:#A83C20}
-.badge-吉本{background:#EAF5EE;color:#2A6A40}
-.badge-川田{background:#F5EEF9;color:#6A38A0}
+.item-content { flex: 1; min-width: 0; }
+.item-name { font-size: 14px; font-weight: 700; line-height: 1.45; color: var(--text-main); transition: all 0.18s; }
+.item-name.done { color: var(--text-muted); text-decoration: line-through; }
+.item-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.item-memo { font-size: 11px; color: var(--text-muted); }
 
-/* ===== Add button ===== */
-.add-item-row{padding:10px 16px}
-.add-btn{
-  width:100%;padding:10px;
-  border:1.5px dashed var(--blue-light);
-  background:transparent;border-radius:10px;
-  color:var(--blue-dark);font-size:13px;
-  font-family:'Noto Sans JP',sans-serif;
-  cursor:pointer;transition:all 0.2s;
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  -webkit-tap-highlight-color:transparent;
+.checker-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.badge-後河内 { background: #E8F4FB; color: #4A7FA8; }
+.badge-吉村   { background: #FBF0EC; color: #C04820; }
+.badge-吉本   { background: #EAF5EE; color: #2A6A40; }
+.badge-川田   { background: #F5EEF9; color: #7A48A0; }
+
+/* ===== Add buttons ===== */
+.add-item-row { padding: 10px 18px; }
+.add-btn {
+  width: 100%; padding: 10px;
+  border: 2px dashed var(--accent-blue-light);
+  background: transparent; border-radius: 14px;
+  color: var(--accent-blue);
+  font-size: 13px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all 0.18s;
+  -webkit-tap-highlight-color: transparent;
 }
-.add-btn:active{background:rgba(122,175,212,0.1)}
+.add-btn:active { background: rgba(132,163,191,0.08); }
+
+.add-store-btn {
+  width: 100%; padding: 14px;
+  border: 2px dashed var(--border);
+  background: transparent; border-radius: 20px;
+  color: var(--text-muted);
+  font-size: 13px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all 0.18s; margin-top: 4px;
+  -webkit-tap-highlight-color: transparent;
+}
+.add-store-btn:active { background: rgba(0,0,0,0.03); }
 
 /* ===== Modal ===== */
-.modal-bg{
-  display:none;position:fixed;inset:0;
-  background:rgba(44,36,32,0.55);z-index:200;
-  align-items:flex-end;justify-content:center;
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(74,67,63,0.45);
+  z-index: 200; align-items: flex-end; justify-content: center;
 }
-.modal-bg.show{display:flex}
-.modal{
-  background:var(--white);border-radius:24px 24px 0 0;
-  padding:22px 20px 44px;width:100%;max-width:420px;
-  animation:slideUp 0.28s ease;
+.modal-bg.show { display: flex; }
+.modal {
+  background: var(--white);
+  border-radius: 28px 28px 0 0;
+  padding: 18px 20px 44px;
+  width: 100%; max-width: 500px;
+  animation: slideUp 0.26s ease;
 }
-@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
-.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px}
-.modal-title{font-size:15px;font-weight:700;margin-bottom:16px;color:var(--text)}
-.modal-field{margin-bottom:13px}
-.modal-label{font-size:12px;color:var(--text-muted);margin-bottom:5px;display:block;font-weight:500}
-.modal-input{
-  width:100%;padding:11px 13px;
-  border:1.5px solid var(--border);border-radius:11px;
-  font-size:14px;font-family:'Noto Sans JP',sans-serif;
-  background:var(--cream);outline:none;color:var(--text);
+@keyframes slideUp {
+  from { transform: translateY(60px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
-.modal-input:focus{border-color:var(--blue)}
-.modal-actions{display:flex;gap:8px;margin-top:18px}
-.modal-cancel{
-  flex:1;padding:12px;border:1.5px solid var(--border);
-  background:transparent;border-radius:12px;
-  font-size:14px;font-family:'Noto Sans JP',sans-serif;
-  cursor:pointer;color:var(--text-muted);
+.modal-handle {
+  width: 36px; height: 4px; background: var(--border);
+  border-radius: 2px; margin: 0 auto 18px;
 }
-.modal-save{
-  flex:2;padding:12px;background:var(--blue);border:none;
-  border-radius:12px;font-size:14px;
-  font-family:'Noto Sans JP',sans-serif;
-  cursor:pointer;color:white;font-weight:700;
+.modal-title { font-size: 15px; font-weight: 700; color: var(--accent-orange); margin-bottom: 16px; }
+.modal-label { font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 5px; }
+.modal-input {
+  width: 100%; padding: 11px 14px;
+  border: 2px solid var(--bg-base); border-radius: 14px;
+  font-size: 16px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700;
+  color: var(--text-main); outline: none; background: var(--bg-base); margin-bottom: 12px;
+}
+.modal-input:focus { border-color: var(--accent-blue); background: var(--white); }
+.modal-actions { display: flex; gap: 8px; margin-top: 6px; }
+.modal-cancel {
+  flex: 1; padding: 12px;
+  border: 2px solid var(--border); background: transparent; border-radius: 14px;
+  font-size: 14px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700;
+  cursor: pointer; color: var(--text-muted);
+}
+.modal-save {
+  flex: 2; padding: 12px;
+  background: var(--accent-orange); border: none; border-radius: 14px;
+  font-size: 14px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700;
+  cursor: pointer; color: var(--white);
 }
 
 /* ===== Toast ===== */
-.toast{
-  position:fixed;bottom:28px;left:50%;
-  transform:translateX(-50%) translateY(80px);
-  background:rgba(44,36,32,0.92);color:white;
-  padding:10px 22px;border-radius:22px;
-  font-size:13px;font-family:'Noto Sans JP',sans-serif;
-  transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
-  z-index:300;white-space:nowrap;pointer-events:none;
+.toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--text-main); color: var(--white);
+  padding: 10px 22px; border-radius: 22px;
+  font-size: 13px; font-weight: 700; font-family: 'Zen Maru Gothic', sans-serif;
+  opacity: 0; transition: all 0.3s; z-index: 300;
+  white-space: nowrap; pointer-events: none;
 }
-.toast.show{transform:translateX(-50%) translateY(0)}
-
-/* ===== Add store ===== */
-.add-store-btn{
-  width:100%;padding:14px;
-  border:2px dashed var(--border);
-  background:transparent;border-radius:16px;
-  color:var(--text-muted);font-size:14px;
-  font-family:'Noto Sans JP',sans-serif;
-  cursor:pointer;transition:all 0.2s;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  margin-top:4px;
-}
-.add-store-btn:active{background:rgba(0,0,0,0.03)}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="header">
-    <div class="header-top">
-      <svg class="flower-svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <ellipse cx="12" cy="5.5" rx="4" ry="5" fill="rgba(255,255,255,0.55)"/>
-        <ellipse cx="12" cy="18.5" rx="4" ry="5" fill="rgba(255,255,255,0.55)"/>
-        <ellipse cx="5.5" cy="12" rx="5" ry="4" fill="rgba(255,255,255,0.55)"/>
-        <ellipse cx="18.5" cy="12" rx="5" ry="4" fill="rgba(255,255,255,0.55)"/>
-        <circle cx="12" cy="12" r="3.5" fill="#E8613A"/>
-      </svg>
-      <div class="header-title">買い出しリスト</div>
-    </div>
-    <div class="user-bar">
-      <button class="user-btn" data-user="後河内" onclick="selectUser('後河内')">後河内</button>
-      <button class="user-btn" data-user="吉村" onclick="selectUser('吉村')">吉村</button>
-      <button class="user-btn" data-user="吉本" onclick="selectUser('吉本')">吉本</button>
-      <button class="user-btn" data-user="川田" onclick="selectUser('川田')">川田</button>
-    </div>
-  </div>
 
-  <div class="sync-bar">
-    <span class="sync-status" id="syncStatus">最終更新: 未同期</span>
-    <button class="sync-btn" id="syncBtn" onclick="syncData()">↑↓ 同期</button>
+<div class="header">
+  <div class="header-title">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <ellipse cx="12" cy="5"  rx="3.8" ry="4.8" fill="#84A3BF" opacity="0.75"/>
+      <ellipse cx="12" cy="19" rx="3.8" ry="4.8" fill="#84A3BF" opacity="0.75"/>
+      <ellipse cx="5"  cy="12" rx="4.8" ry="3.8" fill="#84A3BF" opacity="0.75"/>
+      <ellipse cx="19" cy="12" rx="4.8" ry="3.8" fill="#84A3BF" opacity="0.75"/>
+      <ellipse cx="6.8"  cy="6.8"  rx="3.4" ry="3.4" fill="#E26D43" opacity="0.55"/>
+      <ellipse cx="17.2" cy="6.8"  rx="3.4" ry="3.4" fill="#E26D43" opacity="0.55"/>
+      <ellipse cx="6.8"  cy="17.2" rx="3.4" ry="3.4" fill="#E26D43" opacity="0.55"/>
+      <ellipse cx="17.2" cy="17.2" rx="3.4" ry="3.4" fill="#E26D43" opacity="0.55"/>
+      <circle cx="12" cy="12" r="3.8" fill="#E26D43"/>
+    </svg>
+    買い出しリスト 🛒
   </div>
+  <div class="user-bar">
+    <button class="user-btn" data-user="後河内" onclick="selectUser('後河内')">後河内</button>
+    <button class="user-btn" data-user="吉村"  onclick="selectUser('吉村')">吉村</button>
+    <button class="user-btn" data-user="吉本"  onclick="selectUser('吉本')">吉本</button>
+    <button class="user-btn" data-user="川田"  onclick="selectUser('川田')">川田</button>
+  </div>
+</div>
 
-  <div class="stores-list" id="storesList"></div>
+<div class="sync-bar">
+  <span class="sync-status" id="syncStatus">最終更新: 未同期</span>
+  <button class="sync-btn" id="syncBtn" onclick="syncData()">↑↓ 同期</button>
+</div>
+
+<div class="container">
+  <div id="storesList"></div>
 </div>
 
 <!-- 商品追加モーダル -->
 <div class="modal-bg" id="itemModalBg">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">商品を追加</div>
-    <div class="modal-field">
-      <label class="modal-label">商品名 *</label>
-      <input class="modal-input" id="newItemName" placeholder="例：牛乳">
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">メモ（任意）</label>
-      <input class="modal-input" id="newItemMemo" placeholder="例：3パック・低脂肪">
-    </div>
+    <div class="modal-title">✏️ 商品を追加</div>
+    <label class="modal-label">商品名 *</label>
+    <input class="modal-input" id="newItemName" placeholder="例：牛乳">
+    <label class="modal-label">メモ（任意）</label>
+    <input class="modal-input" id="newItemMemo" placeholder="例：3パック・低脂肪">
     <div class="modal-actions">
       <button class="modal-cancel" onclick="closeItemModal()">キャンセル</button>
-      <button class="modal-save" onclick="saveItem()">追加する</button>
+      <button class="modal-save" onclick="saveItem()">追加する ＋</button>
     </div>
   </div>
 </div>
@@ -270,14 +316,12 @@ html,body{
 <div class="modal-bg" id="storeModalBg">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">店舗を追加</div>
-    <div class="modal-field">
-      <label class="modal-label">店舗名 *</label>
-      <input class="modal-input" id="newStoreName" placeholder="例：イオン">
-    </div>
+    <div class="modal-title">🏪 店舗を追加</div>
+    <label class="modal-label">店舗名 *</label>
+    <input class="modal-input" id="newStoreName" placeholder="例：イオン">
     <div class="modal-actions">
       <button class="modal-cancel" onclick="closeStoreModal()">キャンセル</button>
-      <button class="modal-save" onclick="saveStore()">追加する</button>
+      <button class="modal-save" onclick="saveStore()">追加する ＋</button>
     </div>
   </div>
 </div>
@@ -285,200 +329,170 @@ html,body{
 <div class="toast" id="toast"></div>
 
 <script>
-// =============================================
-// ▼▼▼ GASデプロイ後、このURLを書き換えてください ▼▼▼
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxHYI_EQWPVxKmicCZAZmjteAMFpUxWtmfmatwLOMsgKNs8x9ILaq6IisFw4qwv16ndzA/exec';
-// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-// =============================================
 
 const STORE_COLORS = [
-  {bg:'#EBF5FB',icon:'#7AAFD4',emoji:'🛒'},
-  {bg:'#FBF0EC',icon:'#E8613A',emoji:'🏪'},
-  {bg:'#EAF5EE',icon:'#5BA87A',emoji:'🥬'},
-  {bg:'#F5EEF9',icon:'#A878C8',emoji:'🏬'},
-  {bg:'#FFF8EC',icon:'#D4940A',emoji:'🏮'},
+  { bg:'#EBF5FB', emoji:'🛒' },
+  { bg:'#FBF0EC', emoji:'🏪' },
+  { bg:'#EAF5EE', emoji:'🥬' },
+  { bg:'#F5EEF9', emoji:'🏬' },
+  { bg:'#FFF8EC', emoji:'🏮' },
 ];
 
 let currentUser = null;
 let addTargetStore = null;
 
-// ローカルストレージから復元（オフライン対応）
+function loadLocal() {
+  try { return JSON.parse(localStorage.getItem('kaidashi_data')) || null; } catch { return null; }
+}
+function saveLocal() {
+  try { localStorage.setItem('kaidashi_data', JSON.stringify(data)); } catch {}
+}
+
 let data = loadLocal() || {
-  stores:[
-    {id:'s1',name:'スーパーマルナカ',items:[
-      {id:'i1',name:'牛乳',memo:'3パック',checked:false,checker:null},
-      {id:'i2',name:'卵',memo:'Mサイズ',checked:false,checker:null},
-      {id:'i3',name:'食パン',memo:'',checked:true,checker:'吉村'},
-      {id:'i4',name:'豆腐',memo:'絹ごし',checked:false,checker:null},
+  stores: [
+    { id:'s1', name:'スーパーマルナカ', items:[
+      { id:'i1', name:'牛乳',   memo:'3パック', checked:false, checker:null },
+      { id:'i2', name:'卵',     memo:'Mサイズ', checked:false, checker:null },
+      { id:'i3', name:'食パン', memo:'',        checked:true,  checker:'吉村' },
+      { id:'i4', name:'豆腐',   memo:'絹ごし',  checked:false, checker:null },
     ]},
-    {id:'s2',name:'ドラッグストアコスモス',items:[
-      {id:'i5',name:'シャンプー',memo:'詰め替え用',checked:false,checker:null},
-      {id:'i6',name:'ティッシュ',memo:'5箱入り',checked:true,checker:'後河内'},
+    { id:'s2', name:'ドラッグストアコスモス', items:[
+      { id:'i5', name:'シャンプー', memo:'詰め替え用', checked:false, checker:null },
+      { id:'i6', name:'ティッシュ', memo:'5箱入り',   checked:true,  checker:'後河内' },
     ]},
-    {id:'s3',name:'業務スーパー',items:[
-      {id:'i7',name:'鶏むね肉',memo:'2kg',checked:false,checker:null},
-      {id:'i8',name:'冷凍枝豆',memo:'',checked:false,checker:null},
-      {id:'i9',name:'パスタ',memo:'500g×3',checked:false,checker:null},
+    { id:'s3', name:'業務スーパー', items:[
+      { id:'i7', name:'鶏むね肉', memo:'2kg',    checked:false, checker:null },
+      { id:'i8', name:'冷凍枝豆', memo:'',       checked:false, checker:null },
+      { id:'i9', name:'パスタ',   memo:'500g×3', checked:false, checker:null },
     ]},
   ],
-  openStores:{'s1':true}
+  openStores: { 's1':true }
 };
 
-function loadLocal(){
-  try{return JSON.parse(localStorage.getItem('kaidashi_data'))||null}catch{return null}
-}
-function saveLocal(){
-  try{localStorage.setItem('kaidashi_data', JSON.stringify(data))}catch{}
-}
-
-function selectUser(name){
+function selectUser(name) {
   currentUser = name;
-  document.querySelectorAll('.user-btn').forEach(b=>{
-    b.classList.toggle('active', b.dataset.user===name);
-  });
-  showToast(`${name} さんとして操作中`);
+  document.querySelectorAll('.user-btn').forEach(b => b.classList.toggle('active', b.dataset.user === name));
+  showToast(`${name} さんとして操作中 ✓`);
 }
 
-function toggleStore(sid){
+function toggleStore(sid) {
   data.openStores[sid] = !data.openStores[sid];
   render();
 }
 
-function toggleItem(sid, iid){
-  if(!currentUser){showToast('⬆ 先にユーザーを選択してください');return;}
-  const store = data.stores.find(s=>s.id===sid);
-  const item = store.items.find(i=>i.id===iid);
+function toggleItem(sid, iid) {
+  if (!currentUser) { showToast('⬆ 先にユーザーを選択してください'); return; }
+  const item = data.stores.find(s => s.id === sid).items.find(i => i.id === iid);
   item.checked = !item.checked;
   item.checker = item.checked ? currentUser : null;
-  saveLocal();
-  render();
+  saveLocal(); render();
 }
 
-function openItemModal(sid){
-  if(!currentUser){showToast('⬆ 先にユーザーを選択してください');return;}
+function openItemModal(sid) {
+  if (!currentUser) { showToast('⬆ 先にユーザーを選択してください'); return; }
   addTargetStore = sid;
-  document.getElementById('newItemName').value='';
-  document.getElementById('newItemMemo').value='';
+  document.getElementById('newItemName').value = '';
+  document.getElementById('newItemMemo').value = '';
   document.getElementById('itemModalBg').classList.add('show');
-  setTimeout(()=>document.getElementById('newItemName').focus(),120);
+  setTimeout(() => document.getElementById('newItemName').focus(), 120);
 }
-
-function closeItemModal(){
+function closeItemModal() {
   document.getElementById('itemModalBg').classList.remove('show');
   addTargetStore = null;
 }
-
-function saveItem(){
+function saveItem() {
   const name = document.getElementById('newItemName').value.trim();
-  if(!name){showToast('商品名を入力してください');return;}
+  if (!name) { showToast('商品名を入力してください'); return; }
   const memo = document.getElementById('newItemMemo').value.trim();
-  const store = data.stores.find(s=>s.id===addTargetStore);
-  store.items.push({id:'i'+Date.now(), name, memo, checked:false, checker:null});
-  closeItemModal();
-  saveLocal();
-  render();
-  showToast('追加しました！');
+  data.stores.find(s => s.id === addTargetStore).items.push(
+    { id:'i'+Date.now(), name, memo, checked:false, checker:null }
+  );
+  closeItemModal(); saveLocal(); render();
+  showToast(`「${name}」を追加しました ✓`);
 }
 
-function openStoreModal(){
-  document.getElementById('newStoreName').value='';
+function openStoreModal() {
+  document.getElementById('newStoreName').value = '';
   document.getElementById('storeModalBg').classList.add('show');
-  setTimeout(()=>document.getElementById('newStoreName').focus(),120);
+  setTimeout(() => document.getElementById('newStoreName').focus(), 120);
 }
-
-function closeStoreModal(){
-  document.getElementById('storeModalBg').classList.remove('show');
-}
-
-function saveStore(){
+function closeStoreModal() { document.getElementById('storeModalBg').classList.remove('show'); }
+function saveStore() {
   const name = document.getElementById('newStoreName').value.trim();
-  if(!name){showToast('店舗名を入力してください');return;}
-  const sid = 's'+Date.now();
-  data.stores.push({id:sid, name, items:[]});
+  if (!name) { showToast('店舗名を入力してください'); return; }
+  const sid = 's' + Date.now();
+  data.stores.push({ id:sid, name, items:[] });
   data.openStores[sid] = true;
-  closeStoreModal();
-  saveLocal();
-  render();
-  showToast('店舗を追加しました！');
+  closeStoreModal(); saveLocal(); render();
+  showToast(`「${name}」を追加しました ✓`);
 }
 
-async function syncData(){
+async function syncData() {
   const btn = document.getElementById('syncBtn');
-  btn.textContent = '同期中...';
-  btn.style.opacity = '0.7';
-
+  btn.textContent = '同期中…'; btn.style.opacity = '0.7';
   try {
     const res = await fetch(GAS_URL, {
       method: 'POST',
-      body: JSON.stringify({action:'sync', data})
+      body: JSON.stringify({ action:'sync', data })
     });
     const result = await res.json();
-    
-    if(result.success && result.data){
-      data = {...result.data, openStores: data.openStores};
-      saveLocal();
-      render();
+    if (result.success && result.data) {
+      data = { ...result.data, openStores: data.openStores };
+      saveLocal(); render();
     }
     const now = new Date();
     document.getElementById('syncStatus').textContent =
       `最終更新: ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
-    showToast('同期完了！');
-  } catch(err){
-    // GAS URL未設定の場合はダミー動作
+    showToast('✅ 同期しました！');
+  } catch {
     const now = new Date();
     document.getElementById('syncStatus').textContent =
       `最終更新: ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')} (ローカル)`;
-    showToast('GAS URLを設定すると同期できます');
+    showToast('⚠ 同期に失敗しました');
   }
-  
-  btn.textContent = '↑↓ 同期';
-  btn.style.opacity = '1';
+  btn.textContent = '↑↓ 同期'; btn.style.opacity = '1';
 }
 
-function showToast(msg){
+function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(t._timer);
-  t._timer = setTimeout(()=>t.classList.remove('show'), 2400);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-function render(){
+function render() {
   const list = document.getElementById('storesList');
   list.innerHTML = '';
-
-  data.stores.forEach((store, si)=>{
-    const col = STORE_COLORS[si % STORE_COLORS.length];
+  data.stores.forEach((store, si) => {
+    const col    = STORE_COLORS[si % STORE_COLORS.length];
     const isOpen = !!data.openStores[store.id];
-    const doneCount = store.items.filter(i=>i.checked).length;
-    const total = store.items.length;
-
-    const card = document.createElement('div');
+    const done   = store.items.filter(i => i.checked).length;
+    const total  = store.items.length;
+    const card   = document.createElement('div');
     card.className = 'store-card' + (isOpen ? ' open' : '');
     card.innerHTML = `
       <div class="store-header" onclick="toggleStore('${store.id}')">
         <div class="store-icon" style="background:${col.bg}">${col.emoji}</div>
         <div class="store-name">${store.name}</div>
-        <div class="store-count">${doneCount}/${total}</div>
+        <div class="store-count">${done}/${total}</div>
         <svg class="store-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M5 7.5l5 5 5-5"/>
         </svg>
       </div>
       <div class="store-body">
         <div class="items-list">
-          ${store.items.map(item=>`
-            <div class="item-row${item.checked?' done-row':''}">
-              <div class="checkbox-wrap">
-                <div class="custom-cb${item.checked?' checked checked-'+item.checker:''}"
-                     onclick="toggleItem('${store.id}','${item.id}')">
-                  <span class="check-mark">✓</span>
-                </div>
+          ${store.items.map(item => `
+            <div class="item-row${item.checked ? ' done-row' : ''}">
+              <div class="custom-cb${item.checked ? ' checked checked-'+item.checker : ''}"
+                   onclick="toggleItem('${store.id}','${item.id}')">
+                <span class="check-mark">✓</span>
               </div>
               <div class="item-content">
-                <div class="item-name${item.checked?' done':''}">${item.name}</div>
+                <div class="item-name${item.checked ? ' done' : ''}">${item.name}</div>
                 <div class="item-meta">
-                  ${item.memo?`<span class="item-memo">📝 ${item.memo}</span>`:''}
-                  ${item.checker?`<span class="checker-badge badge-${item.checker}">${item.checker}</span>`:''}
+                  ${item.memo    ? `<span class="item-memo">📝 ${item.memo}</span>` : ''}
+                  ${item.checker ? `<span class="checker-badge badge-${item.checker}">${item.checker}</span>` : ''}
                 </div>
               </div>
             </div>
@@ -497,7 +511,6 @@ function render(){
     list.appendChild(card);
   });
 
-  // 店舗追加ボタン
   const addStoreDiv = document.createElement('div');
   addStoreDiv.innerHTML = `
     <button class="add-store-btn" onclick="openStoreModal()">
@@ -510,21 +523,10 @@ function render(){
   list.appendChild(addStoreDiv);
 }
 
-// モーダル背景クリックで閉じる
-document.getElementById('itemModalBg').addEventListener('click',function(e){
-  if(e.target===this) closeItemModal();
-});
-document.getElementById('storeModalBg').addEventListener('click',function(e){
-  if(e.target===this) closeStoreModal();
-});
-
-// Enterキーで保存
-document.getElementById('newItemMemo').addEventListener('keydown',e=>{
-  if(e.key==='Enter') saveItem();
-});
-document.getElementById('newStoreName').addEventListener('keydown',e=>{
-  if(e.key==='Enter') saveStore();
-});
+document.getElementById('itemModalBg').addEventListener('click', function(e) { if (e.target===this) closeItemModal(); });
+document.getElementById('storeModalBg').addEventListener('click', function(e) { if (e.target===this) closeStoreModal(); });
+document.getElementById('newItemMemo').addEventListener('keydown', e => { if (e.key==='Enter') saveItem(); });
+document.getElementById('newStoreName').addEventListener('keydown', e => { if (e.key==='Enter') saveStore(); });
 
 render();
 </script>
