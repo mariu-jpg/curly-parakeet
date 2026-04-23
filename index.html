@@ -311,6 +311,10 @@ body {
 <div class="container">
   <div id="storesList"></div>
 </div>
+<button onclick="localStorage.clear(); location.reload();" 
+        style="margin-top:20px; color:red; background:none; border:none; font-size:12px; text-decoration:underline;">
+  ブラウザの保存データを完全に消去してリロード
+</button>
 
 <!-- 商品追加モーダル -->
 <div class="modal-bg" id="itemModalBg">
@@ -327,6 +331,8 @@ body {
     </div>
   </div>
 </div>
+
+
 
 <!-- 店舗追加モーダル -->
 <div class="modal-bg" id="storeModalBg">
@@ -508,6 +514,7 @@ function saveItem() {
   showToast(`「${name}」を追加しました ✓`);
   pushToGAS(); // ← 商品追加のたびに自動送信
 }
+
 
 function openStoreModal() {
   document.getElementById('newStoreName').value = '';
