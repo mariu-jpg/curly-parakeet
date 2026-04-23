@@ -84,21 +84,34 @@ body {
 .sync-status {
   font-size: 11px; font-weight: 700;
   color: rgba(255,255,255,0.85);
+  display: flex; align-items: center; gap: 5px;
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #6EE89A;
+  display: inline-block;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+.live-dot.sending { background: #FAC96A; animation: none; }
+.live-dot.error   { background: #F08080; animation: none; }
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(0.85); }
 }
 .sync-btn {
-  background: var(--accent-orange);
+  background: rgba(255,255,255,0.22);
   color: var(--white);
-  border: none;
-  padding: 7px 16px;
-  border-radius: 16px;
-  font-size: 12px;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  padding: 6px 13px;
+  border-radius: 14px;
+  font-size: 11px;
   font-family: 'Zen Maru Gothic', sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.18s;
   -webkit-tap-highlight-color: transparent;
 }
-.sync-btn:active { transform: scale(0.95); opacity: 0.85; }
+.sync-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.35); }
 
 /* ===== Main ===== */
 .container { max-width: 500px; margin: 0 auto; padding: 16px 14px; }
@@ -288,8 +301,11 @@ body {
 </div>
 
 <div class="sync-bar">
-  <span class="sync-status" id="syncStatus">最終更新: 未同期</span>
-  <button class="sync-btn" id="syncBtn" onclick="syncData()">↑↓ 同期</button>
+  <span class="sync-status">
+    <span class="live-dot" id="liveDot"></span>
+    <span id="syncStatus">接続中...</span>
+  </span>
+  <button class="sync-btn" id="syncBtn" onclick="fetchLatest()">↓ 今すぐ取得</button>
 </div>
 
 <div class="container">
@@ -370,6 +386,85 @@ let data = loadLocal() || {
   openStores: { 's1':true }
 };
 
+// ===== ステータス表示 =====
+function setStatus(state, text) {
+  const dot = document.getElementById('liveDot');
+  const st  = document.getElementById('syncStatus');
+  dot.className = 'live-dot' + (state === 'sending' ? ' sending' : state === 'error' ? ' error' : '');
+  st.textContent = text;
+}
+
+// ===== GAS へ送信（fire & forget、UIはブロックしない） =====
+async function pushToGAS() {
+  setStatus('sending', '送信中...');
+  try {
+    const res    = await fetch(GAS_URL, { method:'POST', body: JSON.stringify({ action:'sync', data }) });
+    const result = await res.json();
+    if (result.success && result.data) {
+      // 他の人が追加した店舗・商品をマージ（自分のopenStatesは保持）
+      mergeRemote(result.data);
+    }
+    const t = new Date();
+    setStatus('live', `更新: ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`);
+  } catch {
+    setStatus('error', '送信失敗（オフライン？）');
+  }
+}
+
+// ===== リモートデータをローカルにマージ =====
+function mergeRemote(remote) {
+  const open = data.openStores;
+  // リモートの店舗・商品を基準に、ローカルにないものを追加
+  remote.stores.forEach(rStore => {
+    const local = data.stores.find(s => s.id === rStore.id);
+    if (!local) {
+      data.stores.push(rStore); // 他の人が追加した店舗をそのまま追加
+    } else {
+      rStore.items.forEach(rItem => {
+        const li = local.items.find(i => i.id === rItem.id);
+        if (!li) local.items.push(rItem); // 他の人が追加した商品を追加
+        // チェック状態はリモートを優先（最新が正）
+        else { li.checked = rItem.checked; li.checker = rItem.checker; }
+      });
+    }
+  });
+  data.openStores = open;
+  saveLocal(); render();
+}
+
+// ===== 1分ごとに自動ポーリング =====
+async function fetchLatest() {
+  const btn = document.getElementById('syncBtn');
+  btn.textContent = '取得中…';
+  try {
+    const res    = await fetch(GAS_URL + '?action=get&t=' + Date.now());
+    const result = await res.json();
+    if (result.success && result.data) mergeRemote(result.data);
+    const t = new Date();
+    setStatus('live', `更新: ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`);
+    showToast('✅ 最新データを取得しました');
+  } catch {
+    setStatus('error', '取得失敗');
+    showToast('⚠ 取得に失敗しました');
+  }
+  btn.textContent = '↓ 今すぐ取得';
+}
+
+function startPolling() {
+  setInterval(async () => {
+    try {
+      const res    = await fetch(GAS_URL + '?action=get&t=' + Date.now());
+      const result = await res.json();
+      if (result.success && result.data) mergeRemote(result.data);
+      const t = new Date();
+      setStatus('live', `更新: ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`);
+    } catch {
+      setStatus('error', 'オフライン');
+    }
+  }, 60000);
+}
+
+// ===== ユーザー選択 =====
 function selectUser(name) {
   currentUser = name;
   document.querySelectorAll('.user-btn').forEach(b => b.classList.toggle('active', b.dataset.user === name));
@@ -387,6 +482,7 @@ function toggleItem(sid, iid) {
   item.checked = !item.checked;
   item.checker = item.checked ? currentUser : null;
   saveLocal(); render();
+  pushToGAS(); // ← チェックのたびに自動送信
 }
 
 function openItemModal(sid) {
@@ -410,6 +506,7 @@ function saveItem() {
   );
   closeItemModal(); saveLocal(); render();
   showToast(`「${name}」を追加しました ✓`);
+  pushToGAS(); // ← 商品追加のたびに自動送信
 }
 
 function openStoreModal() {
@@ -426,32 +523,7 @@ function saveStore() {
   data.openStores[sid] = true;
   closeStoreModal(); saveLocal(); render();
   showToast(`「${name}」を追加しました ✓`);
-}
-
-async function syncData() {
-  const btn = document.getElementById('syncBtn');
-  btn.textContent = '同期中…'; btn.style.opacity = '0.7';
-  try {
-    const res = await fetch(GAS_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action:'sync', data })
-    });
-    const result = await res.json();
-    if (result.success && result.data) {
-      data = { ...result.data, openStores: data.openStores };
-      saveLocal(); render();
-    }
-    const now = new Date();
-    document.getElementById('syncStatus').textContent =
-      `最終更新: ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
-    showToast('✅ 同期しました！');
-  } catch {
-    const now = new Date();
-    document.getElementById('syncStatus').textContent =
-      `最終更新: ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')} (ローカル)`;
-    showToast('⚠ 同期に失敗しました');
-  }
-  btn.textContent = '↑↓ 同期'; btn.style.opacity = '1';
+  pushToGAS(); // ← 店舗追加のたびに自動送信
 }
 
 function showToast(msg) {
@@ -529,6 +601,8 @@ document.getElementById('newItemMemo').addEventListener('keydown', e => { if (e.
 document.getElementById('newStoreName').addEventListener('keydown', e => { if (e.key==='Enter') saveStore(); });
 
 render();
+fetchLatest();  // 起動時に最新を取得
+startPolling(); // 5秒ごとに自動更新
 </script>
 </body>
 </html>
