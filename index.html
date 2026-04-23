@@ -372,24 +372,8 @@ function saveLocal() {
 }
 
 let data = loadLocal() || {
-  stores: [
-    { id:'s1', name:'スーパーマルナカ', items:[
-      { id:'i1', name:'牛乳',   memo:'3パック', checked:false, checker:null },
-      { id:'i2', name:'卵',     memo:'Mサイズ', checked:false, checker:null },
-      { id:'i3', name:'食パン', memo:'',        checked:true,  checker:'吉村' },
-      { id:'i4', name:'豆腐',   memo:'絹ごし',  checked:false, checker:null },
-    ]},
-    { id:'s2', name:'ドラッグストアコスモス', items:[
-      { id:'i5', name:'シャンプー', memo:'詰め替え用', checked:false, checker:null },
-      { id:'i6', name:'ティッシュ', memo:'5箱入り',   checked:true,  checker:'後河内' },
-    ]},
-    { id:'s3', name:'業務スーパー', items:[
-      { id:'i7', name:'鶏むね肉', memo:'2kg',    checked:false, checker:null },
-      { id:'i8', name:'冷凍枝豆', memo:'',       checked:false, checker:null },
-      { id:'i9', name:'パスタ',   memo:'500g×3', checked:false, checker:null },
-    ]},
-  ],
-  openStores: { 's1':true }
+  stores: [],
+  openStores: {}
 };
 
 // ===== ステータス表示 =====
