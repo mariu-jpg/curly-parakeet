@@ -73,6 +73,20 @@ body {
 .user-btn[data-user="吉本"].active  { background: #5BA87A; border-color: #5BA87A; }
 .user-btn[data-user="川田"].active  { background: #A878C8; border-color: #A878C8; }
 
+/* ===== リスト部分を通常のゴシック体にする ===== */
+.store-name, 
+.item-name, 
+.item-memo,
+.modal-input {
+  /* 丸文字を解除し、標準的なゴシック体セットを指定 */
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif !important;
+}
+
+/* メモなどは少し細めが見やすいため調整 */
+.item-memo {
+  font-weight: 400; 
+}
+
 /* ===== Sync bar ===== */
 .sync-bar {
   background: var(--accent-blue);
@@ -311,10 +325,6 @@ body {
 <div class="container">
   <div id="storesList"></div>
 </div>
-<button onclick="localStorage.clear(); location.reload();" 
-        style="margin-top:20px; color:red; background:none; border:none; font-size:12px; text-decoration:underline;">
-  ブラウザの保存データを完全に消去してリロード
-</button>
 
 <!-- 商品追加モーダル -->
 <div class="modal-bg" id="itemModalBg">
